@@ -1,4 +1,4 @@
-package org.cb.w3c;
+package org.coffeebreaks.w3c;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
