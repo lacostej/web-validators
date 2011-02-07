@@ -19,7 +19,7 @@ public class NuValidatorTest {
   private NuValidator validator;
   @Before
   public void setUp() {
-    validator = new NuValidatorImpl();
+    validator = new NuValidatorImpl("http://validator.nu/");
   }
 
   @After
