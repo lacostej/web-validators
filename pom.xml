@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.coffeebreaks.w3c</groupId>
-  <artifactId>w3c-validator-client</artifactId>
+  <artifactId>web-validator-client</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>W3C Validator Client</name>
-  <url>http://www.github.com/lacostej/w3c-validator-client</url>
+  <name>Web Validator Client</name>
+  <url>http://www.github.com/lacostej/web-validator-client</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,6 +19,16 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.1</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>1.6</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -32,10 +42,14 @@
       <version>1.8.5</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>1.4</version>
-    </dependency>
   </dependencies>
+
+  <!--repositories>
+    <repository>
+      <id>google gson</id>
+      <url>http://google-gson.googlecode.com/svn/mavenrepo/</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+  </repositories-->
 </project>
