@@ -55,7 +55,7 @@ public class NuValidatorTest {
 
   @Test
   public void uploadInvalidHTML4_01TransitionalFileWithParser() throws IOException {
-    InputStream inputStream = getContent("/invalid4.01Transitional.html");
+    InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
     ValidationResult result = validator.validateContent(inputStream, "html4tr");
     System.out.println(result.getJSonOutput());
     assertTrue("at least one error", result.getErrorCount() > 0);
@@ -70,7 +70,7 @@ public class NuValidatorTest {
 
   @Test
   public void uploadInvalidHTML4_01TransitionalFile() throws IOException {
-    InputStream inputStream = getContent("/invalid4.01Transitional.html");
+    InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
     ValidationResult result = validator.validateContent(inputStream, null);
     System.out.println(result.getJSonOutput());
     assertTrue("at least one error", result.getErrorCount() > 0);

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope">
+<env:Body>
+<m:markupvalidationresponse env:encodingStyle="http://www.w3.org/2003/05/soap-encoding" xmlns:m="http://www.w3.org/2005/10/markup-validator">
+
+    <m:uri>upload://Form Submission</m:uri>
+    <m:checkedby>http://validator.w3.org/</m:checkedby>
+    <m:doctype>-//W3C//DTD HTML 4.01 Transitional//EN</m:doctype>
+    <m:charset>utf-8</m:charset>
+    <m:validity>false</m:validity>
+    <m:errors>
+        <m:errorcount>2</m:errorcount>
+        <m:errorlist>
+
+            <m:error>
+                <m:line>29</m:line>
+                <m:col>7</m:col>
+                <m:message>end tag for element &quot;BODY&quot; which is not open</m:message>
+                <m:messageid>79</m:messageid>
+                <m:explanation>  <![CDATA[
+                      <p class="helpwanted">
+      <a
+        href="http://validator.w3.org/feedback.html?uri=;errmsg_id=79#errormsg"
+	title="Suggest improvements on this error message through our feedback channels"
+      >&#x2709;</a>
+    </p>
+
+    <div class="ve mid-79">
+    <p>
+      The Validator found an end tag for the above element, but that element is
+      not currently open. This is often caused by a leftover end tag from an
+      element that was removed during editing, or by an implicitly closed
+      element (if you have an error related to an element being used where it
+      is not allowed, this is almost certainly the case). In the latter case
+      this error will disappear as soon as you fix the original problem.
+    </p>
+    <p>
+      If this error occurred in a script section of your document, you should probably
+      read this <a href="http://validator.w3.org/docs/help.html#faq-javascript">FAQ entry</a>.
+    </p>
+  </div>
+
+                  ]]>
+                </m:explanation>
+                <m:source><![CDATA[&#60;/body<strong title="Position where error was detected.">&#62;</strong>]]></m:source>
+            </m:error>
+
+            <m:error>
+                <m:line>30</m:line>
+                <m:col>7</m:col>
+                <m:message>end tag for &quot;HTML&quot; which is not finished</m:message>
+                <m:messageid>73</m:messageid>
+                <m:explanation>  <![CDATA[
+                      <p class="helpwanted">
+      <a
+        href="http://validator.w3.org/feedback.html?uri=;errmsg_id=73#errormsg"
+	title="Suggest improvements on this error message through our feedback channels"
+      >&#x2709;</a>
+    </p>
+
+    <div class="ve mid-73">
+    <p>
+      Most likely, you nested tags and closed them in the wrong order. For
+      example &lt;p&gt;&lt;em&gt;...&lt;/p&gt; is not acceptable, as &lt;em&gt;
+      must be closed before &lt;p&gt;. Acceptable nesting is:
+      &lt;p&gt;&lt;em&gt;...&lt;/em&gt;&lt;/p&gt;
+    </p>
+    <p>
+      Another possibility is that you used an element which requires
+      a child element that you did not include. Hence the parent element
+      is "not finished", not complete. For instance, in HTML the &lt;head&gt;
+      element must contain a &lt;title&gt; child element, lists require
+      appropriate list items (&lt;ul&gt; and &lt;ol&gt; require &lt;li&gt;;
+      &lt;dl&gt; requires &lt;dt&gt; and &lt;dd&gt;), and so on.
+    </p>
+  </div>
+
+                  ]]>
+                </m:explanation>
+                <m:source><![CDATA[&#60;/html<strong title="Position where error was detected.">&#62;</strong>]]></m:source>
+            </m:error>
+
+        </m:errorlist>
+    </m:errors>
+    <m:warnings>
+        <m:warningcount>1</m:warningcount>
+        <m:warninglist>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </m:warninglist>
+    </m:warnings>
+</m:markupvalidationresponse>
+</env:Body>
+</env:Envelope>
