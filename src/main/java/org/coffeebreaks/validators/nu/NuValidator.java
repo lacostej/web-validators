@@ -219,6 +219,9 @@ public class NuValidator {
       public int getErrorCount() {
         return jsonObject.getErrorCount();
       }
+      public int getWarningCount() {
+        return jsonObject.getWarningCount();
+      }
       public String getResponseContent() {
         return json;
       }
