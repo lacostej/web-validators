@@ -28,6 +28,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+
 import static org.junit.Assert.*;
 
 /**
@@ -47,6 +49,13 @@ public class NuValidatorTest {
   }
 
   @Test
+  public void validateCoffeebreaksOrgUri() throws Exception {
+    ValidationResult result = validator.validateUri(new URL("http://coffeebreaks.org/"), "html4tr");
+    System.out.println(result.getResponseContent());
+    assertEquals(1, result.getErrorCount());
+  }
+
+  @Test
   public void uploadValidHTML4_01TransitionalFileWithParser() throws IOException {
     InputStream inputStream = getContent("/valid4.01Transitional.html");
     ValidationResult result = validator.validateContent(inputStream, "html4tr");
@@ -57,7 +66,7 @@ public class NuValidatorTest {
   public void uploadInvalidHTML4_01TransitionalFileWithParser() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
     ValidationResult result = validator.validateContent(inputStream, "html4tr");
-    System.out.println(result.getJSonOutput());
+    System.out.println(result.getResponseContent());
     assertTrue("at least one error", result.getErrorCount() > 0);
   }
 
@@ -72,7 +81,7 @@ public class NuValidatorTest {
   public void uploadInvalidHTML4_01TransitionalFile() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
     ValidationResult result = validator.validateContent(inputStream, null);
-    System.out.println(result.getJSonOutput());
+    System.out.println(result.getResponseContent());
     assertTrue("at least one error", result.getErrorCount() > 0);
   }
 

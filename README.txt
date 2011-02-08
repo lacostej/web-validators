@@ -3,6 +3,7 @@ A set of Java APIs to programmatically validate your Web resources (HTML, CSS, e
 Currently supports:
 * Nu Validator (HTML4, HTML5, XHTML, etc..)  (access remote w3c validator - can be installed on own server)
 ** content upload
+** by URL
 * W3c validator (access remote w3c validator - can be installed on own server)
 ** content upload
 ** by URI

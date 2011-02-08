@@ -31,5 +31,5 @@ package org.coffeebreaks.validators.nu;
 public interface ValidationResult {
   boolean isResultIndeterminate();
   int getErrorCount();
-  String getJSonOutput();
+  String getResponseContent();
 }

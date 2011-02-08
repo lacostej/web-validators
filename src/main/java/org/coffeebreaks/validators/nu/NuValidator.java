@@ -27,14 +27,24 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -148,13 +158,38 @@ public class NuValidator {
     }*/
   }
 
+  public ValidationResult validateUri(URL url, String parser) throws IOException {
+    HttpRequestBase method;
+    List<NameValuePair> qParams = new ArrayList<NameValuePair>();
+    qParams.add(new BasicNameValuePair("out", "json"));
+    if (parser != null) {
+      qParams.add(new BasicNameValuePair("parser", parser));
+    }
+    qParams.add(new BasicNameValuePair("doc", url.toString()));
+
+    try{
+      URI uri = new URI(baseUrl);
+      URI uri2 = URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(), uri.getPath(), URLEncodedUtils.format(qParams, "UTF-8"), null);
+      method = new HttpGet(uri2);
+      return validate(method);
+    } catch(URISyntaxException e){
+      throw new IllegalArgumentException("invalid uri. Check your baseUrl " + baseUrl, e);
+    }
+  }
+
   public ValidationResult validateContent(InputStream inputStream, String parser) throws IOException {
-    HttpClient httpclient = new DefaultHttpClient();
+    HttpRequestBase method;
     HttpPost httpPost = new HttpPost(baseUrl + "?out=json&parser=" + parser);
     httpPost.addHeader("Content-Type", "text/html");
     InputStreamEntity inputStreamEntity = new InputStreamEntity(inputStream, -1);
     httpPost.setEntity(inputStreamEntity);
-    HttpResponse response = httpclient.execute(httpPost);
+    method = httpPost;
+    return validate(method);
+  }
+
+  private ValidationResult validate(HttpRequestBase method) throws IOException {
+    HttpClient httpclient = new DefaultHttpClient();
+    HttpResponse response = httpclient.execute(method);
     HttpEntity entity = response.getEntity();
     int statusCode = response.getStatusLine().getStatusCode();
     if (statusCode != HttpStatus.SC_OK) {
@@ -176,7 +211,7 @@ public class NuValidator {
       public int getErrorCount() {
         return jsonObject.getErrorCount();
       }
-      public String getJSonOutput() {
+      public String getResponseContent() {
         return json;
       }
     };
