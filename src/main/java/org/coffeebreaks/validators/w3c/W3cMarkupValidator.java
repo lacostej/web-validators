@@ -23,6 +23,7 @@
 package org.coffeebreaks.validators.w3c;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -106,11 +107,6 @@ public class W3cMarkupValidator {
       method = httpPost;
     }
     HttpResponse response = httpclient.execute(method);
-    /*
-    for(Header header : response.getAllHeaders()){
-      System.out.println(header.toString());
-    }
-    */
     HttpEntity responseEntity = response.getEntity();
     int statusCode = response.getStatusLine().getStatusCode();
     if (statusCode >= HttpStatus.SC_BAD_REQUEST) {
@@ -119,26 +115,41 @@ public class W3cMarkupValidator {
     if (responseEntity == null) {
       throw new IllegalStateException("No entity but HTTP status code: " + statusCode + ". Server side error ?");
     }
+
     InputStream entityContentInputStream = responseEntity.getContent();
     StringWriter output = new StringWriter();
     IOUtils.copy(entityContentInputStream, output, "UTF-8");
     final String soap = output.toString();
-    final W3cSoapValidatorSoapOutput soapObject = parseSoapObject(soap);
+
+    // we can use the response headers instead of the soap
+    // final W3cSoapValidatorSoapOutput soapObject = parseSoapObject(soap);
+
+    String headerValue = getHeaderValue(response, "X-W3C-Validator-Status");
+    final boolean indeterminate = headerValue.equals("Abort");
+    final int errorCount = Integer.parseInt(getHeaderValue(response, "X-W3C-Validator-Errors"));
+    final int warningCount = Integer.parseInt(getHeaderValue(response, "X-W3C-Validator-Warnings"));
 
     return new ValidationResult() {
       public boolean isResultIndeterminate() {
-        return soapObject.isResultIndeterminate();
+        return indeterminate;
       }
       public int getErrorCount() {
-        return soapObject.getErrorCount();
+        return errorCount;
       }
       public int getWarningCount() {
-        return soapObject.getWarningCount();
+        return warningCount;
       }
       public String getResponseContent() {
         return soap;
       }
     };
+  }
+  private static String getHeaderValue(HttpResponse response, String headerName) {
+    Header[] headers = response.getHeaders(headerName);
+    if (headers.length == 0) {
+      throw new IllegalArgumentException("Header: " + headerName + " not found. Implementation or server error");
+    }
+    return headers[0].getValue();
   }
 
   public ValidationResult validateUri(URL url) throws IOException, URISyntaxException {
