@@ -5,3 +5,7 @@ Currently supports:
 ** content upload
 * W3c validator
 ** content upload
+** by URI
+* CSS Validator (depends on https://github.com/lacostej/css-validator)
+** by URI (file:// or http[s]://)
+
