@@ -16,7 +16,7 @@ public class NuValidatorTest {
   private NuValidator validator;
   @Before
   public void setUp() {
-    validator = new NuValidatorImpl("http://validator.nu/");
+    validator = new NuValidator("http://validator.nu/");
   }
 
   @After
@@ -57,7 +57,7 @@ public class NuValidatorTest {
   @Test
   public void testParseJSonOK() {
     String jsonString = "{\"messages\":[{\"type\":\"info\",\"message\":\"HTML4-specific tokenization errors are enabled.\"}]}";
-    NuValidatorImpl.NuValidatorJSonOutput json = NuValidatorImpl.parseJSonObject(jsonString);
+    NuValidator.NuValidatorJSonOutput json = NuValidator.parseJSonObject(jsonString);
     assertFalse("result determinate", json.isResultIndeterminate());
     assertEquals(1, json.getMessages().size());
     assertEquals("info", json.getMessages().get(0).getType());
@@ -67,7 +67,7 @@ public class NuValidatorTest {
   @Test
   public void testParseJSonWithError() {
     String jsonString = "{\"messages\":[{\"type\":\"info\",\"message\":\"HTML4-specific tokenization errors are enabled.\"},{\"type\":\"error\",\"lastLine\":7,\"lastColumn\":7,\"message\":\"The “/>” syntax on void elements is not allowed.  (This is an HTML4-only error.)\",\"extract\":\"\\n</head>\\n<body/>\\n</ht\",\"hiliteStart\":15,\"hiliteLength\":1},{\"type\":\"error\",\"lastLine\":7,\"lastColumn\":7,\"firstColumn\":1,\"message\":\"Self-closing syntax (“/>”) used on a non-void HTML element. Ignoring the slash and treating as a start tag.\",\"extract\":\">\\n</head>\\n<body/>\\n</htm\",\"hiliteStart\":10,\"hiliteLength\":7}]}";
-    NuValidatorImpl.NuValidatorJSonOutput json = NuValidatorImpl.parseJSonObject(jsonString);
+    NuValidator.NuValidatorJSonOutput json = NuValidator.parseJSonObject(jsonString);
     assertFalse("result determinate", json.isResultIndeterminate());
     assertEquals(3, json.getMessages().size());
     assertEquals("info", json.getMessages().get(0).getType());
@@ -78,7 +78,7 @@ public class NuValidatorTest {
   @Test
   public void testParseJSonWithNonDocumentError() {
     String jsonString = "{\"messages\":[{\"type\":\"non-document-error\",\"message\":\"I'm dying...........\"}]}";
-    NuValidatorImpl.NuValidatorJSonOutput json = NuValidatorImpl.parseJSonObject(jsonString);
+    NuValidator.NuValidatorJSonOutput json = NuValidator.parseJSonObject(jsonString);
     assertTrue("result determinate", json.isResultIndeterminate());
     assertEquals(1, json.getMessages().size());
   }
