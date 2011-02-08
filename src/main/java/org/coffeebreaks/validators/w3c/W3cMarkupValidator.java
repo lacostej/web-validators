@@ -23,7 +23,6 @@
 package org.coffeebreaks.validators.w3c;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -147,9 +146,9 @@ public class W3cMarkupValidator {
   }
 
   static W3cSoapValidatorSoapOutput parseSoapObject(String soap) {
-    // ugly hack for now, we don't bother with XML
-    int errorCount = findErrorCount(soap, "errorcount");
-    int warningCount = findErrorCount(soap, "warningcount");
+    // ugly hack for now, we don't bother with XML - where's the WSDL anyway ? There's one for CSS...
+    int errorCount = findNodeValueInXml(soap, "errorcount");
+    int warningCount = findNodeValueInXml(soap, "warningcount");
 
     W3cSoapValidatorSoapOutput w3cSoapValidatorSoapOutput = new W3cSoapValidatorSoapOutput();
     w3cSoapValidatorSoapOutput.errorCount = errorCount;
@@ -157,14 +156,15 @@ public class W3cMarkupValidator {
     w3cSoapValidatorSoapOutput.resultIndeterminate = false;
     return w3cSoapValidatorSoapOutput;
   }
-  private static int findErrorCount(String soap, final String errorcount) {
-    String str = "<m:"+ errorcount + ">";
-    String str1 = "</m:" + errorcount + ">";
-    int start = soap.indexOf(str);
+
+  private static int findNodeValueInXml(String xml, final String nodeName) {
+    String str = "<m:"+ nodeName + ">";
+    String str1 = "</m:" + nodeName + ">";
+    int start = xml.indexOf(str);
     if (start >= 0) {
-      int stop = soap.indexOf(str1);
+      int stop = xml.indexOf(str1);
       if (stop >= 0 && stop > start + str.length())
-        return Integer.parseInt(soap.substring(start + str.length(), stop));
+        return Integer.parseInt(xml.substring(start + str.length(), stop));
     }
     return -1;
   }
