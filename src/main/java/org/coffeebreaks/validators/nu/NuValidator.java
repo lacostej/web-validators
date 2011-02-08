@@ -80,10 +80,15 @@ public class NuValidator {
       return countMessageWithType("error");
     }
     private int countMessageWithType(String type) {
+      return countMessageWithTypeAndSubtype(type, null);
+    }
+    private int countMessageWithTypeAndSubtype(String type, String subtype) {
       int errorCount = 0;
       for(Message message : messages){
         if (type.equals(message.getType())) {
-          errorCount++;
+          if (subtype == null || subtype.equals(message.getSubType()) ) {
+            errorCount++;
+          }
         }
       }
       return errorCount;
@@ -91,12 +96,15 @@ public class NuValidator {
     public boolean isResultIndeterminate() {
       return countMessageWithType("non-document-error") > 0;
     }
+    public int getWarningCount() {
+      return countMessageWithTypeAndSubtype("info", "warning");
+    }
     /*public ParseTree getParseTree() {
       return parseTree;
     }*/
     static class Message {
       String type;
-      String subtype;
+      String subType;
       String message;
       String extract;
       String offset;
@@ -109,8 +117,8 @@ public class NuValidator {
       public String getType() {
         return type;
       }
-      public String getSubtype() {
-        return subtype;
+      public String getSubType() {
+        return subType;
       }
       public String getMessage() {
         return message;

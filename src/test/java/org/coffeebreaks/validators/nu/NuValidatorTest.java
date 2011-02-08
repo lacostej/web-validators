@@ -107,6 +107,15 @@ public class NuValidatorTest {
   }
 
   @Test
+  public void testParseJSonWithErrorsAndWarnings() {
+    String jsonString = "{\"url\":\"http://coffeebreaks.org/\",\"messages\":[{\"type\":\"info\",\"lastLine\":5,\"lastColumn\":74,\"subType\":\"warning\",\"message\":\"Using “windows-1252” instead of the declared encoding “iso-8859-1”.\"},{\"type\":\"error\",\"lastLine\":1,\"lastColumn\":63,\"firstColumn\":1,\"message\":\"Quirky doctype. Expected “<!DOCTYPE HTML PUBLIC \\\"-//W3C//DTD HTML 4.01 Transitional//EN\\\" \\\"http://www.w3.org/TR/html4/loose.dtd\\\">”.\",\"extract\":\"<!DOCTYPE html PUBLIC \\\"-//W3C//DTD HTML 4.01 Transitional//EN\\\">\\n<!-- \",\"hiliteStart\":0,\"hiliteLength\":63},{\"type\":\"info\",\"message\":\"HTML4-specific tokenization errors are enabled.\"}]}";
+    NuValidator.NuValidatorJSonOutput json = NuValidator.parseJSonObject(jsonString);
+    assertFalse("result determinate", json.isResultIndeterminate());
+    assertEquals(1, json.getErrorCount());
+    assertEquals(1, json.getWarningCount());
+  }
+
+  @Test
   public void testParseJSonWithNonDocumentError() {
     String jsonString = "{\"messages\":[{\"type\":\"non-document-error\",\"message\":\"I'm dying...........\"}]}";
     NuValidator.NuValidatorJSonOutput json = NuValidator.parseJSonObject(jsonString);
