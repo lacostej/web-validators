@@ -29,6 +29,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import static org.junit.Assert.*;
 
@@ -40,7 +42,26 @@ public class W3cMarkupValidatorTest {
   private W3cMarkupValidator validator;
   @Before
   public void setUp() {
-    validator = new W3cMarkupValidator("http://validator.w3.org/");
+    // validator = new W3cMarkupValidator("http://localhost/w3c-markup-validator/");
+    validator = new W3cMarkupValidator("http://validator.w3.org/") {
+      @Override
+      public ValidationResult validateContent(InputStream inputStream) throws IOException {
+        dontOverloadW3cServer();
+        return super.validateContent(inputStream);
+      }
+      @Override
+      public ValidationResult validateUri(URL url) throws IOException, URISyntaxException {
+        dontOverloadW3cServer();
+        return super.validateUri(url);
+      }
+    };
+  }
+  private void dontOverloadW3cServer() {
+    try{
+      Thread.sleep(1000);
+    } catch(InterruptedException e){
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    }
   }
 
   @After
@@ -55,6 +76,14 @@ public class W3cMarkupValidatorTest {
     System.out.println(result.getResponseContent());
     assertEquals("no errors", 0, result.getErrorCount());
     assertEquals("warning", 1, result.getWarningCount());
+  }
+
+  @Test
+  public void validateCoffeebreaksOrgUri() throws Exception {
+    ValidationResult result = validator.validateUri(new URL("http://coffeebreaks.org/"));
+    System.out.println(result.getResponseContent());
+    assertEquals(0, result.getErrorCount());
+    assertEquals(0, result.getWarningCount());
   }
 
   @Test
