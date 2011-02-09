@@ -9,4 +9,5 @@ Currently supports:
 ** by URI
 * CSS Validator (works without server, depends on https://github.com/lacostej/css-validator)
 ** by URI (file:// or http[s]://)
-
+* Jsonlint validator (works online with remote server)
+** by remote URI or content. In theory can support reformatting and compression. Features not enabled yet.
