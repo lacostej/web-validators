@@ -27,6 +27,7 @@ package org.coffeebreaks.validators;
  * @since 2/7/11 8:16 PM
  */
 public interface ValidationResult {
+  // I don't like this name. I will probably find a better one
   boolean isResultIndeterminate();
   int getErrorCount();
   int getWarningCount();

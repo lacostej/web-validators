@@ -23,6 +23,11 @@
 package org.coffeebreaks.validators;
 
 /**
+ * So far, no real implementation is made for this class.
+ * <p>
+ * IDEA: Particular validators will come with their own implementations, in order to ease setup, but the only method they
+ * will use internally is this general call, allowing implementers to chose their own implementation. I am not yet sure this is a good idea.
+ *
  * @author jerome@coffeebreaks.org
  * @since 2/9/11 12:42 AM
  */

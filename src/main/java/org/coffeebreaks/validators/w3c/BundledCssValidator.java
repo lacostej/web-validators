@@ -36,17 +36,32 @@ import java.net.URI;
  * This CSS validator doesn't depend on external resources. It is a bundling of the validator found
  * on <a href="http://jigsaw.w3.org/css-validator/">W3c's site</a>.
  *
+ * This validator only support uri addressing so far. Direct content validation isn't yet supported.
+ *
  * @author jerome@coffeebreaks.org
  * @since 2/8/11 6:14 PM
  */
 public class BundledCssValidator implements Validator {
 
+  /**
+   * Not supported.
+   */
   public ValidationResult validateContent(String content, ValidationRequest request) throws IOException {
     throw new UnsupportedOperationException("validateContent not yet supported");
   }
+  /**
+   * Not supported.
+   */
   public ValidationResult validateContent(InputStream inputStream, ValidationRequest request) throws IOException {
     throw new UnsupportedOperationException("validateContent not yet supported");
   }
+  /**
+   * equals to validateUri(uri.toString(), request);
+   * @param uri
+   * @param request
+   * @return
+   * @throws IOException
+   */
   public ValidationResult validateUri(URI uri, ValidationRequest request) throws IOException {
     return validateUri(uri.toString(), request);
   }

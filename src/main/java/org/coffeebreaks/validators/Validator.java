@@ -24,15 +24,21 @@ package org.coffeebreaks.validators;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
- * Represents a Validator.
- *
- * Validator validate files and return results.
- *
+ * NOTE THAT THE API IS STILL BEING DESIGNED AND NO GUARANTEE THAT IT WILL REMAIN STABLE IN BETWEEN EARLY RELEASES (< 1.0).
+ * <p>
+ * Interface to a Validator.
+ * <p>
+ * Validator validate files given a {@link ValidationRequest request} and return {@link ValidationResult results}. The files can be addressed using a URI (most often an URL, but not always), or a content (String, InputStream) assumed to be in UTF-8, excepted otherwise noted.
+ * Not all validators support all features, in which case they should throw {@link UnsupportedOperationException}.
+ * Check the various implementations for details.
+ * <p>
+ * The Validator can depend on a remote service (e.g. like the W3c Validator service), so make sure to check the various service conditions.
+ * <p>
+ * For all methods, {@link ValidationRequest} cannot be null, otherwise a {@link NullPointerException} will be thrown.
+ * Nor the returned {@link ValidationResult} will never be null.
  * @author jerome@coffeebreaks.org
  * @since 2/9/11 12:40 AM
  */
