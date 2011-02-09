@@ -58,7 +58,7 @@ public class BundledCssValidator implements Validator {
    * @throws IOException
    */
   public ValidationResult validateUri(String uri, ValidationRequest request) throws IOException {
-    String profile = request.getValue("profile", null);
+    String profile = request.getValue("profile", "css21");
 
     // ugly hack. Note that passing the wrong options will call System.out! I haven't patched it yet.
     /*
@@ -83,10 +83,12 @@ public class BundledCssValidator implements Validator {
 URL
 	URL can either represent a distant web resource (http://) or a local file (file:/)
       */
-    String[] args = new String[3];
+    String[] args = {};
     args[0] = "-output";
     args[1] = "soap12";
     args[2] = uri;
+    args[3] = "-profile";
+    args[4] = profile;
     PrintStream oldSysout = System.out;
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(baos);
