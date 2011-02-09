@@ -37,6 +37,9 @@ import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.coffeebreaks.validators.ValidationRequest;
+import org.coffeebreaks.validators.ValidationResult;
+import org.coffeebreaks.validators.Validator;
 import org.coffeebreaks.validators.util.StringUtil;
 
 import java.io.IOException;
@@ -55,7 +58,7 @@ import java.util.List;
  * @since 2/8/11 9:57 AM
  * @see <a href="http://validator.w3.org/docs/users.html">
  */
-public class W3cMarkupValidator {
+public class W3cMarkupValidator implements Validator {
   private String baseUrl;
 
   public W3cMarkupValidator(String baseUrl) {
@@ -78,8 +81,18 @@ public class W3cMarkupValidator {
     }
   }
 
-  public ValidationResult validateContent(InputStream inputStream) throws IOException {
+  public ValidationResult validateContent(String content, ValidationRequest request) throws IOException {
+    return validateW3cMarkup("fragment", content, false);
+  }
+  public ValidationResult validateContent(InputStream inputStream, ValidationRequest request) throws IOException {
     return validateW3cMarkup("fragment", StringUtil.readIntoString(inputStream, "UTF-8"), false);
+  }
+
+  public ValidationResult validateUri(URI uri, ValidationRequest request) throws IOException {
+    return validateW3cMarkup("uri", uri.toString(), true);
+  }
+  public ValidationResult validateUri(String uri, ValidationRequest request) throws IOException {
+    return validateW3cMarkup("uri", uri, true);
   }
 
   private ValidationResult validateW3cMarkup(String type, String value, boolean get) throws IOException {
@@ -150,10 +163,6 @@ public class W3cMarkupValidator {
       throw new IllegalArgumentException("Header: " + headerName + " not found. Implementation or server error");
     }
     return headers[0].getValue();
-  }
-
-  public ValidationResult validateUri(URL url) throws IOException, URISyntaxException {
-    return validateW3cMarkup("uri", url.toString(), true);
   }
 
   static W3cSoapValidatorSoapOutput parseSoapObject(String soap) {

@@ -20,11 +20,9 @@
  * THE SOFTWARE.
  */
 
-package org.coffeebreaks.validators.w3c;
+package org.coffeebreaks.validators;
 
 /**
- * Created by IntelliJ IDEA.
- *
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:16 PM
  */

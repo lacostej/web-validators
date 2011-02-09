@@ -37,6 +37,10 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.coffeebreaks.validators.ValidationRequest;
+import org.coffeebreaks.validators.ValidationResult;
+import org.coffeebreaks.validators.Validator;
+import org.coffeebreaks.validators.util.StringUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +55,7 @@ import java.util.List;
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:13 PM
  */
-public class NuValidator {
+public class NuValidator implements Validator {
   private String baseUrl;
 
   public NuValidator(String baseUrl) {
@@ -166,7 +170,20 @@ public class NuValidator {
     }*/
   }
 
-  public ValidationResult validateUri(URL url, String parser) throws IOException {
+  public ValidationResult validateContent(String content, ValidationRequest request) throws IOException {
+    return validateContent(StringUtil.stringToInputStream(content, "UTF-8"), request);
+  }
+
+  public ValidationResult validateUri(String uri, ValidationRequest request) throws IOException {
+    return validateUri(new URL(uri), request);
+  }
+
+  public ValidationResult validateUri(URI uri, ValidationRequest request) throws IOException {
+    return validateUri(uri.toURL(), request);
+  }
+
+  ValidationResult validateUri(URL url, ValidationRequest request) throws IOException {
+    String parser = request.getValue("parser", null);
     HttpRequestBase method;
     List<NameValuePair> qParams = new ArrayList<NameValuePair>();
     qParams.add(new BasicNameValuePair("out", "json"));
@@ -185,7 +202,8 @@ public class NuValidator {
     }
   }
 
-  public ValidationResult validateContent(InputStream inputStream, String parser) throws IOException {
+  public ValidationResult validateContent(InputStream inputStream, ValidationRequest request) throws IOException {
+    String parser = request.getValue("parser", null);
     HttpRequestBase method;
     HttpPost httpPost = new HttpPost(baseUrl + "?out=json&parser=" + parser);
     httpPost.addHeader("Content-Type", "text/html");

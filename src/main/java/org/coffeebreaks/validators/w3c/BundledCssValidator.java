@@ -22,9 +22,15 @@
 
 package org.coffeebreaks.validators.w3c;
 
+import org.coffeebreaks.validators.ValidationRequest;
+import org.coffeebreaks.validators.ValidationResult;
+import org.coffeebreaks.validators.Validator;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.URI;
 
 /**
  * This CSS validator doesn't depend on external resources. It is a bundling of the validator found
@@ -33,14 +39,27 @@ import java.io.PrintStream;
  * @author jerome@coffeebreaks.org
  * @since 2/8/11 6:14 PM
  */
-public class BundledCssValidator {
+public class BundledCssValidator implements Validator {
 
+  public ValidationResult validateContent(String content, ValidationRequest request) throws IOException {
+    throw new UnsupportedOperationException("validateContent not yet supported");
+  }
+  public ValidationResult validateContent(InputStream inputStream, ValidationRequest request) throws IOException {
+    throw new UnsupportedOperationException("validateContent not yet supported");
+  }
+  public ValidationResult validateUri(URI uri, ValidationRequest request) throws IOException {
+    return validateUri(uri.toString(), request);
+  }
   /**
-   *
-   * @param url file: or http[s]:// url
-   * @param profile css1, css2, css21 (default), css3, svg, svgbasic, svgtiny, atsc-tv, mobile, tv
+   * @param uri file: or http[s]:// url are supported
+   * @param request
+         profile css1, css2, css21 (default), css3, svg, svgbasic, svgtiny, atsc-tv, mobile, tv
+   * @return
+   * @throws IOException
    */
-  public ValidationResult validateUri(String url, String profile) throws IOException {
+  public ValidationResult validateUri(String uri, ValidationRequest request) throws IOException {
+    String profile = request.getValue("profile", null);
+
     // ugly hack. Note that passing the wrong options will call System.out! I haven't patched it yet.
     /*
     OPTIONS
@@ -64,11 +83,10 @@ public class BundledCssValidator {
 URL
 	URL can either represent a distant web resource (http://) or a local file (file:/)
       */
-
     String[] args = new String[3];
     args[0] = "-output";
     args[1] = "soap12";
-    args[2] = url;
+    args[2] = uri;
     PrintStream oldSysout = System.out;
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(baos);

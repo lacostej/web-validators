@@ -22,24 +22,30 @@
 
 package org.coffeebreaks.validators.w3c;
 
+import org.coffeebreaks.validators.ValidationResult;
+import org.coffeebreaks.validators.ValidationRequest;
+import org.coffeebreaks.validators.Validator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URL;
-
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:10 PM
  */
 public class BundledCSSValidatorTest {
-  private BundledCssValidator validator;
+  private Validator validator;
+  private ValidationRequest request;
 
   @Before
   public void setUp() {
+    request = mock(ValidationRequest.class);
+
     // validator = new W3cMarkupValidator("http://localhost/w3c-markup-validator/");
     validator = new BundledCssValidator();
   }
@@ -50,7 +56,7 @@ public class BundledCSSValidatorTest {
   @Test
   public void checkValidLocalCss() throws IOException {
     URL url = getContentUrl("/valid2.css");
-    ValidationResult result = validator.validateUri(url.toString(), null);
+    ValidationResult result = validator.validateUri(url.toString(), request);
     System.out.println(result.getResponseContent());
     assertEquals("errors", 0, result.getErrorCount());
     assertEquals("warning", 0, result.getWarningCount());
@@ -59,7 +65,7 @@ public class BundledCSSValidatorTest {
   @Test
   public void checkInvalidLocalCss() throws IOException {
     URL url = getContentUrl("/parse-error2.css");
-    ValidationResult result = validator.validateUri(url.toString(), null);
+    ValidationResult result = validator.validateUri(url.toString(), request);
     System.out.println(result.getResponseContent());
     assertEquals("errors", 3, result.getErrorCount());
     assertEquals("warning", 0, result.getWarningCount());

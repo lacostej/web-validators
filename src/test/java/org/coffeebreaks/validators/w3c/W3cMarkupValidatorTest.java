@@ -22,6 +22,8 @@
 
 package org.coffeebreaks.validators.w3c;
 
+import org.coffeebreaks.validators.ValidationRequest;
+import org.coffeebreaks.validators.ValidationResult;
 import org.coffeebreaks.validators.util.StringUtil;
 import org.junit.After;
 import org.junit.Before;
@@ -29,10 +31,10 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.URI;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author jerome@coffeebreaks.org
@@ -40,19 +42,23 @@ import static org.junit.Assert.*;
  */
 public class W3cMarkupValidatorTest {
   private W3cMarkupValidator validator;
+  private ValidationRequest request;
+
   @Before
   public void setUp() {
+    request = mock(ValidationRequest.class);
+
     // validator = new W3cMarkupValidator("http://localhost/w3c-markup-validator/");
     validator = new W3cMarkupValidator("http://validator.w3.org/") {
       @Override
-      public ValidationResult validateContent(InputStream inputStream) throws IOException {
+      public ValidationResult validateContent(InputStream inputStream, ValidationRequest request) throws IOException {
         dontOverloadW3cServer();
-        return super.validateContent(inputStream);
+        return super.validateContent(inputStream, request);
       }
       @Override
-      public ValidationResult validateUri(URL url) throws IOException, URISyntaxException {
+      public ValidationResult validateUri(URI uri, ValidationRequest request) throws IOException {
         dontOverloadW3cServer();
-        return super.validateUri(url);
+        return super.validateUri(uri, request);
       }
     };
   }
@@ -60,7 +66,7 @@ public class W3cMarkupValidatorTest {
     try{
       Thread.sleep(1000);
     } catch(InterruptedException e){
-      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+      e.printStackTrace();
     }
   }
 
@@ -72,7 +78,7 @@ public class W3cMarkupValidatorTest {
   @Test
   public void uploadValidHTML4_01TransitionalFile() throws IOException {
     InputStream inputStream = getContent("/valid4.01Transitional.html");
-    ValidationResult result = validator.validateContent(inputStream);
+    ValidationResult result = validator.validateContent(inputStream, request);
     System.out.println(result.getResponseContent());
     assertEquals("no errors", 0, result.getErrorCount());
     assertEquals("warning", 1, result.getWarningCount());
@@ -80,7 +86,7 @@ public class W3cMarkupValidatorTest {
 
   @Test
   public void validateCoffeebreaksOrgUri() throws Exception {
-    ValidationResult result = validator.validateUri(new URL("http://coffeebreaks.org/"));
+    ValidationResult result = validator.validateUri("http://coffeebreaks.org/", request);
     System.out.println(result.getResponseContent());
     assertEquals(0, result.getErrorCount());
     assertEquals(0, result.getWarningCount());
@@ -89,7 +95,7 @@ public class W3cMarkupValidatorTest {
   @Test
   public void uploadInvalidHTML4_01TransitionalFile_1() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
-    ValidationResult result = validator.validateContent(inputStream);
+    ValidationResult result = validator.validateContent(inputStream, request);
     System.out.println(result.getResponseContent());
     assertEquals("no error", 0, result.getErrorCount());
     assertEquals("2 warnings", 2, result.getWarningCount());
@@ -98,7 +104,7 @@ public class W3cMarkupValidatorTest {
   @Test
   public void uploadInvalidHTML4_01TransitionalFile_2() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_2.html");
-    ValidationResult result = validator.validateContent(inputStream);
+    ValidationResult result = validator.validateContent(inputStream, request);
     System.out.println(result.getResponseContent());
     assertEquals("errors", 2, result.getErrorCount());
     assertEquals("warning", 1, result.getWarningCount());

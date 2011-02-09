@@ -20,17 +20,25 @@
  * THE SOFTWARE.
  */
 
-package org.coffeebreaks.validators.nu;
+package org.coffeebreaks.validators;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
- * Created by IntelliJ IDEA.
+ * Represents a Validator.
+ *
+ * Validator validate files and return results.
  *
  * @author jerome@coffeebreaks.org
- * @since 2/7/11 8:16 PM
+ * @since 2/9/11 12:40 AM
  */
-public interface ValidationResult {
-  boolean isResultIndeterminate();
-  int getErrorCount();
-  int getWarningCount();
-  String getResponseContent();
+public interface Validator {
+  ValidationResult validateContent(String content, ValidationRequest request) throws IOException;
+  ValidationResult validateContent(InputStream inputStream, ValidationRequest request) throws IOException;
+  ValidationResult validateUri(URI uri, ValidationRequest request) throws IOException;
+  ValidationResult validateUri(String uri, ValidationRequest request) throws IOException;
 }

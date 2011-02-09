@@ -22,6 +22,8 @@
 
 package org.coffeebreaks.validators.nu;
 
+import org.coffeebreaks.validators.ValidationRequest;
+import org.coffeebreaks.validators.ValidationResult;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +33,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * @author jerome@coffeebreaks.org
@@ -38,9 +41,11 @@ import static org.junit.Assert.*;
  */
 public class NuValidatorTest {
   private NuValidator validator;
+  private ValidationRequest request;
   @Before
   public void setUp() {
     validator = new NuValidator("http://validator.nu/");
+    request = mock(ValidationRequest.class);
   }
 
   @After
@@ -50,37 +55,41 @@ public class NuValidatorTest {
 
   @Test
   public void validateCoffeebreaksOrgUri() throws Exception {
-    ValidationResult result = validator.validateUri(new URL("http://coffeebreaks.org/"), "html4tr");
+    setUpRequest("html4tr");
+    ValidationResult result = validator.validateUri(new URL("http://coffeebreaks.org/"), request);
     System.out.println(result.getResponseContent());
     assertEquals(1, result.getErrorCount());
   }
 
   @Test
   public void uploadValidHTML4_01TransitionalFileWithParser() throws IOException {
+    setUpRequest("html4tr");
     InputStream inputStream = getContent("/valid4.01Transitional.html");
-    ValidationResult result = validator.validateContent(inputStream, "html4tr");
+    ValidationResult result = validator.validateContent(inputStream, request);
     assertEquals("no errors", 0, result.getErrorCount());
   }
 
   @Test
   public void uploadInvalidHTML4_01TransitionalFileWithParser() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
-    ValidationResult result = validator.validateContent(inputStream, "html4tr");
+    ValidationResult result = validator.validateContent(inputStream, request);
     System.out.println(result.getResponseContent());
     assertTrue("at least one error", result.getErrorCount() > 0);
   }
 
   @Test
   public void uploadValidHTML4_01TransitionalFile() throws IOException {
+    setUpRequest(null);
     InputStream inputStream = getContent("/valid4.01Transitional.html");
-    ValidationResult result = validator.validateContent(inputStream, null);
+    ValidationResult result = validator.validateContent(inputStream, request);
     assertEquals("no errors", 0, result.getErrorCount());
   }
 
   @Test
   public void uploadInvalidHTML4_01TransitionalFile() throws IOException {
+    setUpRequest(null);
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
-    ValidationResult result = validator.validateContent(inputStream, null);
+    ValidationResult result = validator.validateContent(inputStream, request);
     System.out.println(result.getResponseContent());
     assertTrue("at least one error", result.getErrorCount() > 0);
   }
@@ -121,6 +130,10 @@ public class NuValidatorTest {
     NuValidator.NuValidatorJSonOutput json = NuValidator.parseJSonObject(jsonString);
     assertTrue("result determinate", json.isResultIndeterminate());
     assertEquals(1, json.getMessages().size());
+  }
+
+  private void setUpRequest(final String parser) {
+    when(request.getValue(eq("parser"), any())).thenReturn(parser);
   }
 
   private InputStream getContent(String resource) throws IOException {

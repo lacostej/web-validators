@@ -20,29 +20,12 @@
  * THE SOFTWARE.
  */
 
-package org.coffeebreaks.validators.util;
-
-import org.apache.commons.io.IOUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+package org.coffeebreaks.validators;
 
 /**
- * Created by IntelliJ IDEA.
- *
  * @author jerome@coffeebreaks.org
- * @since 2/8/11 10:45 AM
+ * @since 2/9/11 12:42 AM
  */
-public class StringUtil {
-  public static String readIntoString(InputStream is, String charset) throws IOException {
-    StringWriter output = new StringWriter();
-    IOUtils.copy(is, output, charset);
-    return output.toString();
-  }
-  public static ByteArrayInputStream stringToInputStream(String content, String charset) throws UnsupportedEncodingException {
-    return new ByteArrayInputStream(content.getBytes(charset));
-  }
+public interface ValidationRequest {
+  <T>T  getValue(String name, T defaultValue);
 }
