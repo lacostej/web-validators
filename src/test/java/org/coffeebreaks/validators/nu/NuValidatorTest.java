@@ -24,9 +24,13 @@ package org.coffeebreaks.validators.nu;
 
 import org.coffeebreaks.validators.ValidationRequest;
 import org.coffeebreaks.validators.ValidationResult;
+import org.coffeebreaks.validators.util.IfOfflineCondition;
+import org.coffeebreaks.validators.util.RuntimeIgnore;
+import org.coffeebreaks.validators.util.RuntimeIgnoreAwareRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +43,7 @@ import static org.mockito.Mockito.*;
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:10 PM
  */
+@RunWith(RuntimeIgnoreAwareRunner.class)
 public class NuValidatorTest {
   private NuValidator validator;
   private ValidationRequest request;
@@ -54,6 +59,7 @@ public class NuValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void validateCoffeebreaksOrgUri() throws Exception {
     setUpRequest("html4tr");
     ValidationResult result = validator.validateUri(new URL("http://coffeebreaks.org/"), request);
@@ -62,6 +68,7 @@ public class NuValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadValidHTML4_01TransitionalFileWithParser() throws IOException {
     setUpRequest("html4tr");
     InputStream inputStream = getContent("/valid4.01Transitional.html");
@@ -70,6 +77,7 @@ public class NuValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadInvalidHTML4_01TransitionalFileWithParser() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
     ValidationResult result = validator.validateContent(inputStream, request);
@@ -78,6 +86,7 @@ public class NuValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadValidHTML4_01TransitionalFile() throws IOException {
     setUpRequest(null);
     InputStream inputStream = getContent("/valid4.01Transitional.html");
@@ -86,6 +95,7 @@ public class NuValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadInvalidHTML4_01TransitionalFile() throws IOException {
     setUpRequest(null);
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");

@@ -24,10 +24,14 @@ package org.coffeebreaks.validators.jsonlint;
 
 import org.coffeebreaks.validators.ValidationRequest;
 import org.coffeebreaks.validators.ValidationResult;
+import org.coffeebreaks.validators.util.IfOfflineCondition;
+import org.coffeebreaks.validators.util.RuntimeIgnore;
+import org.coffeebreaks.validators.util.RuntimeIgnoreAwareRunner;
 import org.coffeebreaks.validators.util.StringUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +44,7 @@ import static org.mockito.Mockito.*;
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:10 PM
  */
+@RunWith(RuntimeIgnoreAwareRunner.class)
 public class JsonlintValidatorTest {
   private JsonlintValidator validator;
   private ValidationRequest request;
@@ -55,6 +60,7 @@ public class JsonlintValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void validateRedditJsonUri() throws Exception {
     ValidationResult result = validator.validateUri(new URL("http://www.reddit.com/r/programming/comments/9szpc/jsonlint_a_handy_json_validator_and_reformatter.json"), request);
     System.out.println(result.getResponseContent());
@@ -62,6 +68,7 @@ public class JsonlintValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadValidJson() throws IOException {
     InputStream inputStream = getContent("/jsonlint/valid.json");
     ValidationResult result = validator.validateContent(inputStream, request);
@@ -69,6 +76,7 @@ public class JsonlintValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadInvalidJson() throws IOException {
     InputStream inputStream = getContent("/jsonlint/invalid.json");
     ValidationResult result = validator.validateContent(inputStream, request);

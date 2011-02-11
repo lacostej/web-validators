@@ -24,10 +24,14 @@ package org.coffeebreaks.validators.w3c;
 
 import org.coffeebreaks.validators.ValidationRequest;
 import org.coffeebreaks.validators.ValidationResult;
+import org.coffeebreaks.validators.util.IfOfflineCondition;
+import org.coffeebreaks.validators.util.RuntimeIgnore;
+import org.coffeebreaks.validators.util.RuntimeIgnoreAwareRunner;
 import org.coffeebreaks.validators.util.StringUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +44,7 @@ import static org.mockito.Mockito.mock;
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:10 PM
  */
+@RunWith(RuntimeIgnoreAwareRunner.class)
 public class W3cMarkupValidatorTest {
   private W3cMarkupValidator validator;
   private ValidationRequest request;
@@ -76,6 +81,7 @@ public class W3cMarkupValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadValidHTML4_01TransitionalFile() throws IOException {
     InputStream inputStream = getContent("/valid4.01Transitional.html");
     ValidationResult result = validator.validateContent(inputStream, request);
@@ -85,6 +91,7 @@ public class W3cMarkupValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void validateCoffeebreaksOrgUri() throws Exception {
     ValidationResult result = validator.validateUri("http://coffeebreaks.org/", request);
     System.out.println(result.getResponseContent());
@@ -93,6 +100,7 @@ public class W3cMarkupValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadInvalidHTML4_01TransitionalFile_1() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_1.html");
     ValidationResult result = validator.validateContent(inputStream, request);
@@ -102,6 +110,7 @@ public class W3cMarkupValidatorTest {
   }
 
   @Test
+  @RuntimeIgnore(ifTrue = IfOfflineCondition.class)
   public void uploadInvalidHTML4_01TransitionalFile_2() throws IOException {
     InputStream inputStream = getContent("/invalid4.01Transitional_2.html");
     ValidationResult result = validator.validateContent(inputStream, request);
