@@ -22,6 +22,7 @@
 
 package org.coffeebreaks.validators.w3c;
 
+import org.coffeebreaks.validators.SimpleValidationRequest;
 import org.coffeebreaks.validators.ValidationResult;
 import org.coffeebreaks.validators.ValidationRequest;
 import org.coffeebreaks.validators.Validator;
@@ -44,7 +45,7 @@ public class BundledCSSValidatorTest {
 
   @Before
   public void setUp() {
-    request = mock(ValidationRequest.class);
+    request = new SimpleValidationRequest();
 
     // validator = new W3cMarkupValidator("http://localhost/w3c-markup-validator/");
     validator = new BundledCssValidator();

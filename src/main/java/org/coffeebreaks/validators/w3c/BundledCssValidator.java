@@ -74,6 +74,9 @@ public class BundledCssValidator implements Validator {
    */
   public ValidationResult validateUri(String uri, ValidationRequest request) throws IOException {
     String profile = request.getValue("profile", "css21");
+    if (profile == null) {
+      throw new IllegalStateException("Implementation error: profile argument value not found in ValidationRequest");
+    }
 
     // ugly hack. Note that passing the wrong options will call System.out! I haven't patched it yet.
     /*
@@ -98,7 +101,7 @@ public class BundledCssValidator implements Validator {
 URL
 	URL can either represent a distant web resource (http://) or a local file (file:/)
       */
-    String[] args = {};
+    String[] args = new String[5];
     args[0] = "-output";
     args[1] = "soap12";
     args[2] = uri;
