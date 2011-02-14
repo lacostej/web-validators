@@ -26,11 +26,13 @@ import org.coffeebreaks.validators.ValidationRequest;
 import org.coffeebreaks.validators.ValidationResult;
 import org.coffeebreaks.validators.util.IfOfflineCondition;
 import org.coffeebreaks.validators.util.RuntimeIgnore;
-import org.coffeebreaks.validators.util.RuntimeIgnoreAwareRunner;
+import org.coffeebreaks.validators.util.RuntimeIgnoreRule;
 import org.coffeebreaks.validators.util.StringUtil;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
@@ -44,10 +46,11 @@ import static org.mockito.Mockito.mock;
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:10 PM
  */
-@RunWith(RuntimeIgnoreAwareRunner.class)
 public class W3cMarkupValidatorTest {
   private W3cMarkupValidator validator;
   private ValidationRequest request;
+
+  @Rule public MethodRule rule = new RuntimeIgnoreRule();
 
   @Before
   public void setUp() {

@@ -22,34 +22,22 @@
 
 package org.coffeebreaks.validators.util;
 
-import org.junit.internal.runners.model.EachTestNotifier;
-import org.junit.runner.Description;
-import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.Assume;
+import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.Statement;
 
 /**
- * A JUnit4 runner aware of RuntimeIgnore. Can't we backport this back to Ignore/BlockJunit4ClassRunner
- *
  * @author jerome@coffeebreaks.org
- * @since 2/10/11 11:00 PM
+ * @since 2/14/11 6:18 PM
  */
-public class RuntimeIgnoreAwareRunner extends BlockJUnit4ClassRunner {
+public class RuntimeIgnoreRule implements MethodRule {
 
-  public RuntimeIgnoreAwareRunner(Class<?> testClass) throws InitializationError {
-    super(testClass);
+  public Statement apply(Statement base, FrameworkMethod method, Object target) {
+    Assume.assumeTrue(!isRuntimeIgnored(method));
+    return base;
   }
 
-  @Override
-  protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-    EachTestNotifier eachNotifier= makeNotifier(method, notifier);
-    if (isRuntimeIgnored(method)) {
-      eachNotifier.fireTestIgnored();
-    } else {
-      super.runChild(method, notifier);
-    }
-  }
   private boolean isRuntimeIgnored(FrameworkMethod method) {
     RuntimeIgnore annotation = method.getAnnotation(RuntimeIgnore.class);
     return annotation != null && annotation.ifTrue() != null && isTrue(annotation.ifTrue(), method);
@@ -61,11 +49,5 @@ public class RuntimeIgnoreAwareRunner extends BlockJUnit4ClassRunner {
     } catch(Exception e){
       throw new RuntimeException(e);
     }
-  }
-
-  private EachTestNotifier makeNotifier(FrameworkMethod method,
-      RunNotifier notifier) {
-    Description description= describeChild(method);
-    return new EachTestNotifier(notifier, description);
   }
 }

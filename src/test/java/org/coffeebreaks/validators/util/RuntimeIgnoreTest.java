@@ -23,7 +23,9 @@
 package org.coffeebreaks.validators.util;
 
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 
@@ -32,22 +34,17 @@ import static org.junit.Assert.*;
 /**
  * Test the junit extension for RuntimeIgnore
  */
-@RunWith(RuntimeIgnoreAwareRunner.class)
 public class RuntimeIgnoreTest {
-  @Ignore
-  @Test
+  @Rule
+  public MethodRule rule = new RuntimeIgnoreRule();
+
+  @Ignore @Test
   public void testStandardIgnore() {
   }
 
   static class NameAwareIgnoreCondition implements RuntimeCondition {
     public boolean isTrue(FrameworkMethod method) {
       return method.getName().endsWith("Ignore");
-    }
-  }
-
-  static class FalseIgnoreCondition implements RuntimeCondition {
-    public boolean isTrue(FrameworkMethod method) {
-      return false;
     }
   }
 

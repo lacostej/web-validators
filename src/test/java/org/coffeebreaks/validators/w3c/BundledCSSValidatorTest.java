@@ -26,11 +26,9 @@ import org.coffeebreaks.validators.SimpleValidationRequest;
 import org.coffeebreaks.validators.ValidationResult;
 import org.coffeebreaks.validators.ValidationRequest;
 import org.coffeebreaks.validators.Validator;
-import org.coffeebreaks.validators.util.RuntimeIgnoreAwareRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,7 +38,6 @@ import static org.junit.Assert.*;
  * @author jerome@coffeebreaks.org
  * @since 2/7/11 8:10 PM
  */
-@RunWith(RuntimeIgnoreAwareRunner.class)
 public class BundledCSSValidatorTest {
   private Validator validator;
   private ValidationRequest request;
